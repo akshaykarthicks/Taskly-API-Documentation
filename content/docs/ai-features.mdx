@@ -1,0 +1,443 @@
+---
+title: 🤖 AI Features
+description: Learn how Taskly.AI uses artificial intelligence to enhance your productivity
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+## AI-Powered Task Management
+
+Taskly.AI leverages artificial intelligence to transform how you manage tasks. Our AI engine analyzes your task descriptions and automatically generates comprehensive subtasks with realistic timelines.
+
+![AI Subtask Generation](/images/create-task.png)
+
+## How AI Subtask Generation Works
+
+### The Process
+
+<Steps>
+
+<Step>
+
+### Describe Your Task
+
+Simply enter a task title and description. The more detailed your description, the better the AI can understand your project scope.
+
+**Example Input:**
+```
+Title: Build crew AI project for food crew
+Description: I need to build crew AI project for food crew so give me step process with timing to complete within 10 days
+```
+
+</Step>
+
+<Step>
+
+### AI Analysis
+
+When you click "Generate Subtasks", our AI:
+1. **Analyzes** your task description
+2. **Identifies** key project phases
+3. **Estimates** realistic timelines
+4. **Breaks down** complex requirements
+5. **Generates** actionable subtasks
+
+</Step>
+
+<Step>
+
+### Review Generated Subtasks
+
+The AI provides a structured breakdown with:
+- Clear subtask descriptions
+- Time estimates (Day 1-2, Day 2-3, etc.)
+- Logical sequence of steps
+- Realistic completion timelines
+
+**Example Output:**
+- Define AI functionalities and scope (Day 1-2)
+- Data acquisition and preprocessing (Day 2-3)
+- AI model selection and training (Day 3-6)
+- Develop user interface and integration (Day 6-9)
+- Testing and refinement (Day 9-10)
+- Deployment and documentation (Day 10)
+
+</Step>
+
+<Step>
+
+### Customize & Execute
+
+Review the AI-generated subtasks and:
+- Edit any subtask as needed
+- Adjust timelines based on your schedule
+- Add or remove subtasks
+- Start executing your plan
+
+</Step>
+
+</Steps>
+
+![Task with Subtasks](/images/task-detail.png)
+
+## AI Capabilities
+
+### 1. Intelligent Project Breakdown
+
+The AI understands various project types:
+
+**Software Development:**
+- Requirements gathering
+- Design and architecture
+- Implementation phases
+- Testing and QA
+- Deployment
+
+**Content Creation:**
+- Research and planning
+- Drafting
+- Editing and revision
+- Publishing
+
+**Business Projects:**
+- Market research
+- Strategy development
+- Implementation
+- Monitoring and optimization
+
+### 2. Timeline Estimation
+
+The AI considers:
+- Task complexity
+- Industry standards
+- Sequential dependencies
+- Realistic work schedules
+
+<Callout type="info">
+Timeline estimates are based on typical project patterns. Adjust them based on your team size and resources.
+</Callout>
+
+### 3. Context-Aware Suggestions
+
+The AI adapts to different contexts:
+- **Technical projects**: Includes development, testing, deployment phases
+- **Creative projects**: Focuses on ideation, creation, refinement
+- **Research projects**: Emphasizes investigation, analysis, documentation
+
+## Best Practices for AI Generation
+
+### Write Effective Task Descriptions
+
+<Tabs items={['Good Example', 'Better Example', 'Best Example']}>
+
+<Tab value="Good Example">
+
+```
+Title: Website redesign
+Description: Redesign company website
+```
+
+**Result**: Basic subtasks with generic steps
+
+</Tab>
+
+<Tab value="Better Example">
+
+```
+Title: Website redesign
+Description: Redesign company website with modern UI, 
+improve mobile responsiveness, and add new features
+```
+
+**Result**: More specific subtasks covering UI, mobile, and features
+
+</Tab>
+
+<Tab value="Best Example">
+
+```
+Title: Website redesign
+Description: Complete redesign of company website using React. 
+Goals: Modern UI with dark mode, full mobile responsiveness, 
+add blog section, integrate contact forms, improve SEO. 
+Timeline: 3 weeks. Team: 2 developers, 1 designer.
+```
+
+**Result**: Highly detailed subtasks with specific technologies, 
+features, and realistic timelines
+
+</Tab>
+
+</Tabs>
+
+### Include Key Information
+
+For best AI results, mention:
+
+1. **Project Goal**: What you want to achieve
+2. **Scope**: What's included and excluded
+3. **Timeline**: Desired completion time
+4. **Resources**: Team size, tools, budget
+5. **Constraints**: Limitations or requirements
+6. **Deliverables**: Expected outcomes
+
+### Example: Detailed Task Description
+
+```
+Title: Mobile App Development - Fitness Tracker
+
+Description:
+Develop a cross-platform fitness tracking mobile app using React Native.
+
+Features:
+- User authentication and profiles
+- Activity tracking (steps, calories, workouts)
+- Goal setting and progress visualization
+- Social features (share achievements)
+- Integration with wearable devices
+
+Timeline: 8 weeks
+Team: 3 developers, 1 designer, 1 QA
+Tech Stack: React Native, Firebase, Redux
+Platform: iOS and Android
+
+Deliverables:
+- Functional MVP
+- App store submissions
+- User documentation
+- API documentation
+```
+
+**AI Output**: Comprehensive breakdown with 15-20 subtasks covering all phases
+
+## AI API Integration
+
+Developers can integrate AI subtask generation into their applications:
+
+### Generate Subtasks via API
+
+<Tabs items={['Request', 'Response']}>
+
+<Tab value="Request">
+
+```http
+POST /api/tasks/{task_id}/generate-subtasks
+Authorization: Token {your_token}
+Content-Type: application/json
+
+{
+  "task_id": 5,
+  "context": {
+    "timeline": "10 days",
+    "team_size": 2,
+    "complexity": "medium"
+  }
+}
+```
+
+</Tab>
+
+<Tab value="Response">
+
+```json
+{
+  "task_id": 5,
+  "subtasks": [
+    {
+      "title": "Define AI functionalities and scope",
+      "timeline": "Day 1-2",
+      "order": 1,
+      "estimated_hours": 16
+    },
+    {
+      "title": "Data acquisition and preprocessing",
+      "timeline": "Day 2-3",
+      "order": 2,
+      "estimated_hours": 8
+    },
+    {
+      "title": "AI model selection and training",
+      "timeline": "Day 3-6",
+      "order": 3,
+      "estimated_hours": 24
+    }
+  ],
+  "total_estimated_hours": 80,
+  "confidence_score": 0.92
+}
+```
+
+</Tab>
+
+</Tabs>
+
+### JavaScript Example
+
+```javascript
+async function generateSubtasks(taskId, taskDescription) {
+  const response = await fetch(`/api/tasks/${taskId}/generate-subtasks`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Token ${authToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      task_id: taskId,
+      description: taskDescription,
+      context: {
+        timeline: '2 weeks',
+        team_size: 3
+      }
+    })
+  });
+
+  const data = await response.json();
+  return data.subtasks;
+}
+```
+
+### Python Example
+
+```python
+import requests
+
+def generate_subtasks(task_id, description, timeline="2 weeks"):
+    url = f"http://localhost:8000/api/tasks/{task_id}/generate-subtasks"
+    headers = {
+        "Authorization": f"Token {auth_token}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "task_id": task_id,
+        "description": description,
+        "context": {
+            "timeline": timeline,
+            "team_size": 2
+        }
+    }
+    
+    response = requests.post(url, json=payload, headers=headers)
+    return response.json()["subtasks"]
+```
+
+## AI Model Information
+
+### Technology Stack
+
+Taskly.AI uses:
+- **Natural Language Processing (NLP)** for understanding task descriptions
+- **Machine Learning models** trained on project management data
+- **Pattern recognition** for identifying project phases
+- **Time estimation algorithms** based on historical data
+
+### Continuous Improvement
+
+The AI model improves over time by:
+- Learning from user feedback
+- Analyzing successful project patterns
+- Adapting to industry trends
+- Incorporating user customizations
+
+<Callout type="tip">
+The more you use AI subtask generation, the better it becomes at understanding your specific project patterns and preferences.
+</Callout>
+
+## Use Cases
+
+### Software Development
+
+```
+Input: "Build a REST API for e-commerce platform with user auth, 
+product catalog, shopping cart, and payment integration"
+
+AI Generates:
+✓ Set up project structure and dependencies
+✓ Implement user authentication system
+✓ Create product catalog endpoints
+✓ Build shopping cart functionality
+✓ Integrate payment gateway
+✓ Write API documentation
+✓ Implement testing suite
+✓ Deploy to production
+```
+
+### Content Creation
+
+```
+Input: "Create comprehensive blog post about AI in healthcare, 
+3000 words, with research, images, and SEO optimization"
+
+AI Generates:
+✓ Research AI healthcare applications
+✓ Outline article structure
+✓ Write introduction and overview
+✓ Develop main content sections
+✓ Find and create supporting images
+✓ Optimize for SEO
+✓ Edit and proofread
+✓ Publish and promote
+```
+
+### Event Planning
+
+```
+Input: "Organize company annual conference for 200 attendees, 
+2-day event with speakers, workshops, and networking"
+
+AI Generates:
+✓ Define event goals and budget
+✓ Secure venue and catering
+✓ Invite and confirm speakers
+✓ Plan workshop sessions
+✓ Set up registration system
+✓ Arrange accommodation
+✓ Prepare marketing materials
+✓ Coordinate day-of logistics
+```
+
+## Limitations & Considerations
+
+<Callout type="warn">
+**AI Limitations:**
+- Requires clear task descriptions for best results
+- May need manual adjustment for highly specialized projects
+- Timeline estimates are guidelines, not guarantees
+- Works best with well-defined project scopes
+</Callout>
+
+### When to Use AI Generation
+
+✅ **Good for:**
+- Standard project types
+- Well-defined scopes
+- Projects with clear phases
+- Learning project management
+- Quick planning sessions
+
+❌ **May need manual planning:**
+- Highly specialized domains
+- Unique/unprecedented projects
+- Projects with many unknowns
+- Extremely tight deadlines
+- Projects requiring specific methodologies
+
+## Tips for Maximum AI Benefit
+
+1. **Be Specific**: Include technologies, tools, and methodologies
+2. **Set Context**: Mention team size, timeline, and resources
+3. **Define Scope**: Clearly state what's included and excluded
+4. **Iterate**: Regenerate with refined descriptions if needed
+5. **Customize**: Edit AI suggestions to match your workflow
+6. **Learn**: Observe patterns in AI suggestions to improve your planning
+
+## Next Steps
+
+- Try [Creating Your First AI-Powered Task](/docs/getting-started)
+- Explore the [API Reference](/docs/api) for integration
+- Check out [Examples](/docs/examples) for code samples
+
+<Callout type="info">
+Have feedback on AI features? We're constantly improving! Share your experience to help us make the AI even better.
+</Callout>
