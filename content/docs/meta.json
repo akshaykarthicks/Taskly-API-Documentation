@@ -1,0 +1,25 @@
+{
+  "title": "Documentation",
+  "pages": [
+    {
+      "title": "📚 Getting Started",
+      "pages": [
+        "index",
+        "getting-started"
+      ]
+    },
+    {
+      "title": "🔐 Authentication",
+      "pages": [
+        "authentication"
+      ]
+    },
+    {
+      "title": "📖 API Reference",
+      "pages": [
+        "api",
+        "examples"
+      ]
+    }
+  ]
+}

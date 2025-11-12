@@ -1,0 +1,491 @@
+---
+title: 💻 Examples
+description: Code examples and integration guides for Taskly API
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## Complete Integration Examples
+
+### JavaScript/TypeScript Client
+
+A complete example of integrating Taskly API in a JavaScript application:
+
+```typescript title="taskly-client.ts"
+class TasklyClient {
+  private baseUrl: string;
+  private token: string | null = null;
+
+  constructor(baseUrl: string = 'http://localhost:8000/api') {
+    this.baseUrl = baseUrl;
+  }
+
+  // Authentication
+  async register(username: string, email: string, password: string) {
+    const response = await fetch(`${this.baseUrl}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, email, password }),
+    });
+    
+    if (!response.ok) throw new Error('Registration failed');
+    
+    const data = await response.json();
+    this.token = data.token;
+    return data;
+  }
+
+  async login(username: string, password: string) {
+    const response = await fetch(`${this.baseUrl}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+    
+    if (!response.ok) throw new Error('Login failed');
+    
+    const data = await response.json();
+    this.token = data.token;
+    return data;
+  }
+
+  // Helper method for authenticated requests
+  private async request(endpoint: string, options: RequestInit = {}) {
+    if (!this.token) throw new Error('Not authenticated');
+    
+    const response = await fetch(`${this.baseUrl}${endpoint}`, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${this.token}`,
+        ...options.headers,
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Request failed: ${response.statusText}`);
+    }
+    
+    return response.status === 204 ? null : response.json();
+  }
+
+  // Task operations
+  async getTasks(filters?: { completed?: boolean; search?: string }) {
+    const params = new URLSearchParams();
+    if (filters?.completed !== undefined) {
+      params.append('completed', String(filters.completed));
+    }
+    if (filters?.search) {
+      params.append('search', filters.search);
+    }
+    
+    const query = params.toString() ? `?${params.toString()}` : '';
+    return this.request(`/tasks${query}`);
+  }
+
+  async getTask(id: number) {
+    return this.request(`/tasks/${id}`);
+  }
+
+  async createTask(task: {
+    title: string;
+    description?: string;
+    priority?: 'low' | 'medium' | 'high';
+    due_date?: string;
+  }) {
+    return this.request('/tasks', {
+      method: 'POST',
+      body: JSON.stringify(task),
+    });
+  }
+
+  async updateTask(id: number, updates: Partial<{
+    title: string;
+    description: string;
+    completed: boolean;
+    priority: 'low' | 'medium' | 'high';
+    due_date: string;
+  }>) {
+    return this.request(`/tasks/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(updates),
+    });
+  }
+
+  async deleteTask(id: number) {
+    return this.request(`/tasks/${id}`, { method: 'DELETE' });
+  }
+
+  async getCurrentUser() {
+    return this.request('/users/me');
+  }
+}
+
+// Usage
+const client = new TasklyClient();
+
+// Login
+await client.login('johndoe', 'password123');
+
+// Create a task
+const task = await client.createTask({
+  title: 'Build awesome app',
+  description: 'Using Taskly API',
+  priority: 'high',
+  due_date: '2025-11-20',
+});
+
+// Get all tasks
+const tasks = await client.getTasks();
+
+// Update task
+await client.updateTask(task.id, { completed: true });
+
+// Delete task
+await client.deleteTask(task.id);
+```
+
+### Python Client
+
+A complete Python client for Taskly API:
+
+```python title="taskly_client.py"
+import requests
+from typing import Optional, Dict, List
+from datetime import datetime
+
+class TasklyClient:
+    def __init__(self, base_url: str = "http://localhost:8000/api"):
+        self.base_url = base_url
+        self.token: Optional[str] = None
+        self.session = requests.Session()
+    
+    def register(self, username: str, email: str, password: str, 
+                 first_name: str = "", last_name: str = "") -> Dict:
+        """Register a new user"""
+        response = self.session.post(
+            f"{self.base_url}/auth/register",
+            json={
+                "username": username,
+                "email": email,
+                "password": password,
+                "first_name": first_name,
+                "last_name": last_name
+            }
+        )
+        response.raise_for_status()
+        data = response.json()
+        self.token = data.get("token")
+        self._update_auth_header()
+        return data
+    
+    def login(self, username: str, password: str) -> Dict:
+        """Login and get authentication token"""
+        response = self.session.post(
+            f"{self.base_url}/auth/login",
+            json={"username": username, "password": password}
+        )
+        response.raise_for_status()
+        data = response.json()
+        self.token = data.get("token")
+        self._update_auth_header()
+        return data
+    
+    def _update_auth_header(self):
+        """Update session headers with auth token"""
+        if self.token:
+            self.session.headers.update({
+                "Authorization": f"Token {self.token}"
+            })
+    
+    def get_tasks(self, completed: Optional[bool] = None, 
+                  search: Optional[str] = None) -> List[Dict]:
+        """Get all tasks with optional filters"""
+        params = {}
+        if completed is not None:
+            params["completed"] = str(completed).lower()
+        if search:
+            params["search"] = search
+        
+        response = self.session.get(
+            f"{self.base_url}/tasks",
+            params=params
+        )
+        response.raise_for_status()
+        return response.json()
+    
+    def get_task(self, task_id: int) -> Dict:
+        """Get a specific task"""
+        response = self.session.get(f"{self.base_url}/tasks/{task_id}")
+        response.raise_for_status()
+        return response.json()
+    
+    def create_task(self, title: str, description: str = "",
+                    priority: str = "medium", 
+                    due_date: Optional[str] = None) -> Dict:
+        """Create a new task"""
+        data = {
+            "title": title,
+            "description": description,
+            "priority": priority
+        }
+        if due_date:
+            data["due_date"] = due_date
+        
+        response = self.session.post(
+            f"{self.base_url}/tasks",
+            json=data
+        )
+        response.raise_for_status()
+        return response.json()
+    
+    def update_task(self, task_id: int, **kwargs) -> Dict:
+        """Update a task"""
+        response = self.session.patch(
+            f"{self.base_url}/tasks/{task_id}",
+            json=kwargs
+        )
+        response.raise_for_status()
+        return response.json()
+    
+    def delete_task(self, task_id: int) -> None:
+        """Delete a task"""
+        response = self.session.delete(f"{self.base_url}/tasks/{task_id}")
+        response.raise_for_status()
+    
+    def get_current_user(self) -> Dict:
+        """Get current user profile"""
+        response = self.session.get(f"{self.base_url}/users/me")
+        response.raise_for_status()
+        return response.json()
+
+# Usage example
+if __name__ == "__main__":
+    client = TasklyClient()
+    
+    # Login
+    client.login("johndoe", "password123")
+    
+    # Create a task
+    task = client.create_task(
+        title="Complete documentation",
+        description="Write API docs",
+        priority="high",
+        due_date="2025-11-20"
+    )
+    print(f"Created task: {task['id']}")
+    
+    # Get all tasks
+    tasks = client.get_tasks()
+    print(f"Total tasks: {len(tasks)}")
+    
+    # Update task
+    updated = client.update_task(task['id'], completed=True)
+    print(f"Task completed: {updated['completed']}")
+    
+    # Delete task
+    client.delete_task(task['id'])
+    print("Task deleted")
+```
+
+### React Hook Example
+
+Custom React hook for Taskly integration:
+
+```typescript title="useTaskly.ts"
+import { useState, useEffect } from 'react';
+
+interface Task {
+  id: number;
+  title: string;
+  description: string;
+  completed: boolean;
+  priority: 'low' | 'medium' | 'high';
+  due_date: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export function useTaskly(token: string) {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const baseUrl = 'http://localhost:8000/api';
+
+  const fetchTasks = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${baseUrl}/tasks`, {
+        headers: { 'Authorization': `Token ${token}` },
+      });
+      if (!response.ok) throw new Error('Failed to fetch tasks');
+      const data = await response.json();
+      setTasks(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createTask = async (task: Omit<Task, 'id' | 'created_at' | 'updated_at'>) => {
+    try {
+      const response = await fetch(`${baseUrl}/tasks`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`,
+        },
+        body: JSON.stringify(task),
+      });
+      if (!response.ok) throw new Error('Failed to create task');
+      const newTask = await response.json();
+      setTasks([...tasks, newTask]);
+      return newTask;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    }
+  };
+
+  const updateTask = async (id: number, updates: Partial<Task>) => {
+    try {
+      const response = await fetch(`${baseUrl}/tasks/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`,
+        },
+        body: JSON.stringify(updates),
+      });
+      if (!response.ok) throw new Error('Failed to update task');
+      const updatedTask = await response.json();
+      setTasks(tasks.map(t => t.id === id ? updatedTask : t));
+      return updatedTask;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    }
+  };
+
+  const deleteTask = async (id: number) => {
+    try {
+      const response = await fetch(`${baseUrl}/tasks/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Token ${token}` },
+      });
+      if (!response.ok) throw new Error('Failed to delete task');
+      setTasks(tasks.filter(t => t.id !== id));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    }
+  };
+
+  useEffect(() => {
+    if (token) fetchTasks();
+  }, [token]);
+
+  return {
+    tasks,
+    loading,
+    error,
+    createTask,
+    updateTask,
+    deleteTask,
+    refetch: fetchTasks,
+  };
+}
+
+// Usage in component
+function TaskList() {
+  const token = localStorage.getItem('authToken') || '';
+  const { tasks, loading, createTask, updateTask, deleteTask } = useTaskly(token);
+
+  if (loading) return <div>Loading...</div>;
+
+  return (
+    <div>
+      {tasks.map(task => (
+        <div key={task.id}>
+          <h3>{task.title}</h3>
+          <button onClick={() => updateTask(task.id, { completed: !task.completed })}>
+            Toggle
+          </button>
+          <button onClick={() => deleteTask(task.id)}>Delete</button>
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+## Common Use Cases
+
+### Filter Completed Tasks
+
+<Tabs items={['JavaScript', 'Python', 'cURL']}>
+
+<Tab value="JavaScript">
+
+```javascript
+// Get only completed tasks
+const completedTasks = await client.getTasks({ completed: true });
+
+// Get only incomplete tasks
+const incompleteTasks = await client.getTasks({ completed: false });
+```
+
+</Tab>
+
+<Tab value="Python">
+
+```python
+# Get only completed tasks
+completed = client.get_tasks(completed=True)
+
+# Get only incomplete tasks
+incomplete = client.get_tasks(completed=False)
+```
+
+</Tab>
+
+<Tab value="cURL">
+
+```bash
+# Get completed tasks
+curl "http://localhost:8000/api/tasks?completed=true" \
+  -H "Authorization: Token YOUR_TOKEN"
+
+# Get incomplete tasks
+curl "http://localhost:8000/api/tasks?completed=false" \
+  -H "Authorization: Token YOUR_TOKEN"
+```
+
+</Tab>
+
+</Tabs>
+
+### Search Tasks
+
+```javascript
+// Search for tasks containing "documentation"
+const results = await client.getTasks({ search: 'documentation' });
+```
+
+### Bulk Operations
+
+```javascript
+// Mark all tasks as completed
+const tasks = await client.getTasks({ completed: false });
+await Promise.all(
+  tasks.map(task => client.updateTask(task.id, { completed: true }))
+);
+```
+
+<Callout type="info">
+For more examples and use cases, check out the [API Reference](/docs/api) documentation.
+</Callout>

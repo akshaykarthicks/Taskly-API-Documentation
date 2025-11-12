@@ -1,0 +1,286 @@
+---
+title: 🔑 Authentication
+description: Learn how to authenticate with the Taskly API
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## Overview
+
+Taskly uses **token-based authentication** to secure API endpoints. Each user receives a unique authentication token that must be included in API requests.
+
+## Authentication Flow
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API
+    participant Database
+    
+    Client->>API: POST /api/auth/login (credentials)
+    API->>Database: Verify credentials
+    Database-->>API: User validated
+    API-->>Client: Return auth token
+    Client->>API: GET /api/tasks (with token)
+    API-->>Client: Return tasks
+```
+
+## Register a New User
+
+Create a new user account:
+
+<Tabs items={['cURL', 'JavaScript', 'Python']}>
+
+<Tab value="cURL">
+
+```bash
+curl -X POST http://localhost:8000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "johndoe",
+    "email": "john@example.com",
+    "password": "securePassword123",
+    "first_name": "John",
+    "last_name": "Doe"
+  }'
+```
+
+</Tab>
+
+<Tab value="JavaScript">
+
+```javascript
+const response = await fetch('http://localhost:8000/api/auth/register', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    username: 'johndoe',
+    email: 'john@example.com',
+    password: 'securePassword123',
+    first_name: 'John',
+    last_name: 'Doe',
+  }),
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+</Tab>
+
+<Tab value="Python">
+
+```python
+import requests
+
+url = 'http://localhost:8000/api/auth/register'
+data = {
+    'username': 'johndoe',
+    'email': 'john@example.com',
+    'password': 'securePassword123',
+    'first_name': 'John',
+    'last_name': 'Doe'
+}
+
+response = requests.post(url, json=data)
+print(response.json())
+```
+
+</Tab>
+
+</Tabs>
+
+**Response:**
+
+```json
+{
+  "id": 1,
+  "username": "johndoe",
+  "email": "john@example.com",
+  "first_name": "John",
+  "last_name": "Doe",
+  "token": "9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+}
+```
+
+## Login
+
+Obtain an authentication token by logging in:
+
+<Tabs items={['cURL', 'JavaScript', 'Python']}>
+
+<Tab value="cURL">
+
+```bash
+curl -X POST http://localhost:8000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "johndoe",
+    "password": "securePassword123"
+  }'
+```
+
+</Tab>
+
+<Tab value="JavaScript">
+
+```javascript
+const response = await fetch('http://localhost:8000/api/auth/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    username: 'johndoe',
+    password: 'securePassword123',
+  }),
+});
+
+const data = await response.json();
+localStorage.setItem('authToken', data.token);
+```
+
+</Tab>
+
+<Tab value="Python">
+
+```python
+import requests
+
+url = 'http://localhost:8000/api/auth/login'
+data = {
+    'username': 'johndoe',
+    'password': 'securePassword123'
+}
+
+response = requests.post(url, json=data)
+token = response.json()['token']
+```
+
+</Tab>
+
+</Tabs>
+
+**Response:**
+
+```json
+{
+  "token": "9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b",
+  "user": {
+    "id": 1,
+    "username": "johndoe",
+    "email": "john@example.com"
+  }
+}
+```
+
+## Using the Token
+
+Include the token in the `Authorization` header for all authenticated requests:
+
+```
+Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b
+```
+
+### Example Authenticated Request
+
+<Tabs items={['cURL', 'JavaScript', 'Python']}>
+
+<Tab value="cURL">
+
+```bash
+curl -X GET http://localhost:8000/api/tasks \
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+```
+
+</Tab>
+
+<Tab value="JavaScript">
+
+```javascript
+const token = localStorage.getItem('authToken');
+
+const response = await fetch('http://localhost:8000/api/tasks', {
+  headers: {
+    'Authorization': `Token ${token}`,
+  },
+});
+
+const tasks = await response.json();
+```
+
+</Tab>
+
+<Tab value="Python">
+
+```python
+import requests
+
+token = '9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'
+headers = {'Authorization': f'Token {token}'}
+
+response = requests.get('http://localhost:8000/api/tasks', headers=headers)
+tasks = response.json()
+```
+
+</Tab>
+
+</Tabs>
+
+## Logout
+
+To logout, simply delete the token on the client side. Optionally, you can call a logout endpoint if implemented:
+
+```javascript
+localStorage.removeItem('authToken');
+```
+
+<Callout type="info">
+Tokens don't expire by default in Django's token authentication. Consider implementing token expiration for production use.
+</Callout>
+
+## Security Best Practices
+
+1. **HTTPS Only**: Always use HTTPS in production to encrypt token transmission
+2. **Secure Storage**: Store tokens securely (HttpOnly cookies or secure storage)
+3. **Token Rotation**: Implement token refresh mechanisms for long-lived sessions
+4. **Rate Limiting**: Add rate limiting to prevent brute force attacks
+5. **Strong Passwords**: Enforce strong password policies
+
+<Callout type="warn">
+Never expose your authentication tokens in client-side code, logs, or version control!
+</Callout>
+
+## Error Responses
+
+### Invalid Credentials
+
+```json
+{
+  "error": "Invalid username or password"
+}
+```
+
+### Missing Token
+
+```json
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+
+### Invalid Token
+
+```json
+{
+  "detail": "Invalid token."
+}
+```
+
+## Next Steps
+
+- Explore the [API Reference](/docs/api) to see what you can do with authentication
+- Check out [Examples](/docs/examples) for complete integration examples
