@@ -29,13 +29,8 @@ export default function Layout({ children }: LayoutProps<'/docs'>) {
           </div>
         ),
       }}
-      containerProps={{
-        className: 'max-w-full overflow-x-hidden'
-      }}
     >
-      <div className="max-w-full overflow-x-hidden px-4 md:px-6">
-        {children}
-      </div>
+      {children}
     </DocsLayout>
   );
 }

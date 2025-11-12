@@ -45,14 +45,14 @@ export default function HomePage() {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
               <Link 
                 href="/docs" 
-                className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 hover:scale-105"
+                className="group relative px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg font-semibold text-base shadow-lg hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 hover:scale-105"
               >
                 <span className="relative z-10 flex items-center gap-2">
                   Get Started
-                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                 </span>
@@ -60,7 +60,7 @@ export default function HomePage() {
               <Link 
                 href="https://taskly-ai-five.vercel.app/tasks"
                 target="_blank"
-                className="px-8 py-4 border-2 border-border bg-background/50 backdrop-blur-sm rounded-xl font-bold text-lg hover:bg-accent transition-all duration-300 hover:scale-105 hover:border-primary/50"
+                className="px-5 py-2.5 border-2 border-border bg-background/50 backdrop-blur-sm rounded-lg font-semibold text-base hover:bg-accent transition-all duration-300 hover:scale-105 hover:border-primary/50"
               >
                 Try Live Demo
               </Link>
@@ -68,16 +68,16 @@ export default function HomePage() {
           </div>
 
           {/* Dashboard Preview */}
-          <div className="relative max-w-6xl mx-auto mt-20">
-            <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-2xl blur-2xl opacity-20 animate-pulse" />
-            <div className="relative rounded-2xl overflow-hidden border-2 border-border shadow-2xl bg-card">
+          <div className="relative max-w-2xl mx-auto mt-12">
+            <div className="absolute -inset-3 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-xl blur-xl opacity-20 animate-pulse" />
+            <div className="relative rounded-xl overflow-hidden border-2 border-border shadow-xl bg-card aspect-video">
               <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent z-10" />
               <Image
                 src="/images/dashboard.png"
                 alt="Taskly.AI Dashboard Preview"
-                width={1400}
-                height={800}
-                className="w-full h-auto"
+                width={800}
+                height={450}
+                className="w-full h-full object-cover"
                 priority
               />
             </div>
@@ -87,12 +87,12 @@ export default function HomePage() {
 
       {/* Features Grid */}
       <section className="px-4 py-24 bg-gradient-to-b from-transparent via-muted/30 to-transparent">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16 space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12 space-y-3">
+            <h2 className="text-3xl md:text-4xl font-bold">
               Powerful Features
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Everything you need to manage tasks like a pro
             </p>
           </div>
@@ -116,35 +116,17 @@ export default function HomePage() {
                 title: "Priority Management",
                 description: "Focus on what matters with intelligent priority levels and status tracking",
                 gradient: "from-purple-500/10 to-pink-500/10"
-              },
-              {
-                icon: "⚡",
-                title: "Lightning Fast",
-                description: "Built with modern tech for instant responsiveness and seamless user experience",
-                gradient: "from-yellow-500/10 to-orange-500/10"
-              },
-              {
-                icon: "🔒",
-                title: "Secure API",
-                description: "Token-based authentication and secure endpoints keep your data protected",
-                gradient: "from-green-500/10 to-emerald-500/10"
-              },
-              {
-                icon: "🎨",
-                title: "Beautiful Design",
-                description: "Sleek dark mode interface with smooth animations and intuitive navigation",
-                gradient: "from-pink-500/10 to-rose-500/10"
               }
             ].map((feature, index) => (
               <div
                 key={index}
-                className="group relative p-8 rounded-2xl border border-border bg-card hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                className="group relative p-6 rounded-xl border border-border bg-card hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg h-full flex flex-col"
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-                <div className="relative space-y-4">
-                  <div className="text-5xl">{feature.icon}</div>
-                  <h3 className="text-xl font-bold">{feature.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">
+                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                <div className="relative space-y-3 flex-1">
+                  <div className="text-4xl">{feature.icon}</div>
+                  <h3 className="text-lg font-bold">{feature.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
@@ -155,51 +137,51 @@ export default function HomePage() {
       </section>
 
       {/* Stats Section */}
-      <section className="px-4 py-24">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
+      <section className="px-4 py-20">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 text-center">
             <div className="space-y-2">
-              <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              <div className="text-4xl md:text-5xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 AI-Powered
               </div>
-              <p className="text-muted-foreground">Intelligent Task Breakdown</p>
+              <p className="text-sm text-muted-foreground">Intelligent Task Breakdown</p>
             </div>
             <div className="space-y-2">
-              <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+              <div className="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
                 Real-Time
               </div>
-              <p className="text-muted-foreground">Analytics & Insights</p>
+              <p className="text-sm text-muted-foreground">Analytics & Insights</p>
             </div>
             <div className="space-y-2">
-              <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
+              <div className="text-4xl md:text-5xl font-black bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
                 Secure
               </div>
-              <p className="text-muted-foreground">API Authentication</p>
+              <p className="text-sm text-muted-foreground">API Authentication</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="px-4 py-24 relative overflow-hidden">
+      <section className="px-4 py-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-600/10" />
-        <div className="max-w-4xl mx-auto text-center relative z-10 space-y-8">
-          <h2 className="text-4xl md:text-5xl font-bold">
+        <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6">
+          <h2 className="text-3xl md:text-4xl font-bold">
             Ready to Transform Your Workflow?
           </h2>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-lg text-muted-foreground">
             Join developers and teams using Taskly.AI to stay organized and productive
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <Link 
-              href="/docs/getting-started" 
-              className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 hover:scale-105"
+              href="/docs/how-to-use" 
+              className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg font-semibold text-base shadow-lg hover:shadow-xl hover:shadow-cyan-500/50 transition-all duration-300 hover:scale-105"
             >
               Read Documentation
             </Link>
             <Link 
               href="/docs/api" 
-              className="px-8 py-4 border-2 border-border bg-background/50 backdrop-blur-sm rounded-xl font-bold text-lg hover:bg-accent transition-all duration-300 hover:scale-105"
+              className="px-6 py-3 border-2 border-border bg-background/50 backdrop-blur-sm rounded-lg font-semibold text-base hover:bg-accent transition-all duration-300 hover:scale-105"
             >
               View API Reference
             </Link>
