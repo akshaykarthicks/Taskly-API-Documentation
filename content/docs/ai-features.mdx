@@ -212,115 +212,7 @@ Deliverables:
 
 **AI Output**: Comprehensive breakdown with 15-20 subtasks covering all phases
 
-## AI API Integration
 
-Developers can integrate AI subtask generation into their applications:
-
-### Generate Subtasks via API
-
-<Tabs items={['Request', 'Response']}>
-
-<Tab value="Request">
-
-```http
-POST /api/tasks/{task_id}/generate-subtasks
-Authorization: Token {your_token}
-Content-Type: application/json
-
-{
-  "task_id": 5,
-  "context": {
-    "timeline": "10 days",
-    "team_size": 2,
-    "complexity": "medium"
-  }
-}
-```
-
-</Tab>
-
-<Tab value="Response">
-
-```json
-{
-  "task_id": 5,
-  "subtasks": [
-    {
-      "title": "Define AI functionalities and scope",
-      "timeline": "Day 1-2",
-      "order": 1,
-      "estimated_hours": 16
-    },
-    {
-      "title": "Data acquisition and preprocessing",
-      "timeline": "Day 2-3",
-      "order": 2,
-      "estimated_hours": 8
-    },
-    {
-      "title": "AI model selection and training",
-      "timeline": "Day 3-6",
-      "order": 3,
-      "estimated_hours": 24
-    }
-  ],
-  "total_estimated_hours": 80,
-  "confidence_score": 0.92
-}
-```
-
-</Tab>
-
-</Tabs>
-
-### JavaScript Example
-
-```javascript
-async function generateSubtasks(taskId, taskDescription) {
-  const response = await fetch(`/api/tasks/${taskId}/generate-subtasks`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Token ${authToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      task_id: taskId,
-      description: taskDescription,
-      context: {
-        timeline: '2 weeks',
-        team_size: 3
-      }
-    })
-  });
-
-  const data = await response.json();
-  return data.subtasks;
-}
-```
-
-### Python Example
-
-```python
-import requests
-
-def generate_subtasks(task_id, description, timeline="2 weeks"):
-    url = f"http://localhost:8000/api/tasks/{task_id}/generate-subtasks"
-    headers = {
-        "Authorization": f"Token {auth_token}",
-        "Content-Type": "application/json"
-    }
-    payload = {
-        "task_id": task_id,
-        "description": description,
-        "context": {
-            "timeline": timeline,
-            "team_size": 2
-        }
-    }
-    
-    response = requests.post(url, json=payload, headers=headers)
-    return response.json()["subtasks"]
-```
 
 ## AI Model Information
 
@@ -434,9 +326,9 @@ AI Generates:
 
 ## Next Steps
 
-- Try [Creating Your First AI-Powered Task](/docs/getting-started)
-- Explore the [API Reference](/docs/api) for integration
-- Check out [Examples](/docs/examples) for code samples
+- Try [Using Taskly.AI](/docs/how-to-use) with the step-by-step guide
+- Explore all [Features](/docs/features) available
+- [Try the Live App](https://taskly-ai-five.vercel.app/tasks) now!
 
 <Callout type="info">
 Have feedback on AI features? We're constantly improving! Share your experience to help us make the AI even better.
