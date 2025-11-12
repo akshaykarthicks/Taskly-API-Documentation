@@ -12,8 +12,8 @@ export default function HomePage() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative px-4 py-24 md:py-32 overflow-hidden">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative px-4 py-24 md:py-32 overflow-hidden min-h-screen flex items-center">
+        <div className="max-w-7xl mx-auto w-full">
           <div className="text-center space-y-8 mb-16">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/10 backdrop-blur-sm">
@@ -65,126 +65,6 @@ export default function HomePage() {
                 Try Live Demo
               </Link>
             </div>
-          </div>
-
-          {/* Dashboard Preview */}
-          <div className="relative max-w-2xl mx-auto mt-12">
-            <div className="absolute -inset-3 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-xl blur-xl opacity-20 animate-pulse" />
-            <div className="relative rounded-xl overflow-hidden border-2 border-border shadow-xl bg-card aspect-video">
-              <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent z-10" />
-              <Image
-                src="/images/dashboard.png"
-                alt="Taskly.AI Dashboard Preview"
-                width={800}
-                height={450}
-                className="w-full h-full object-cover"
-                priority
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="px-4 py-24 bg-gradient-to-b from-transparent via-muted/30 to-transparent">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12 space-y-3">
-            <h2 className="text-3xl md:text-4xl font-bold">
-              Powerful Features
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Everything you need to manage tasks like a pro
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                icon: "🤖",
-                title: "AI Subtask Generation",
-                description: "Break down complex projects into actionable steps with AI-powered suggestions and realistic timelines",
-                gradient: "from-cyan-500/10 to-blue-500/10"
-              },
-              {
-                icon: "📊",
-                title: "Smart Dashboard",
-                description: "Visualize productivity with real-time analytics, completion trends, and priority insights",
-                gradient: "from-blue-500/10 to-purple-500/10"
-              },
-              {
-                icon: "🎯",
-                title: "Priority Management",
-                description: "Focus on what matters with intelligent priority levels and status tracking",
-                gradient: "from-purple-500/10 to-pink-500/10"
-              }
-            ].map((feature, index) => (
-              <div
-                key={index}
-                className="group relative p-6 rounded-xl border border-border bg-card hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-lg h-full flex flex-col"
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-                <div className="relative space-y-3 flex-1">
-                  <div className="text-4xl">{feature.icon}</div>
-                  <h3 className="text-lg font-bold">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="px-4 py-20">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-6 text-center">
-            <div className="space-y-2">
-              <div className="text-4xl md:text-5xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                AI-Powered
-              </div>
-              <p className="text-sm text-muted-foreground">Intelligent Task Breakdown</p>
-            </div>
-            <div className="space-y-2">
-              <div className="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-                Real-Time
-              </div>
-              <p className="text-sm text-muted-foreground">Analytics & Insights</p>
-            </div>
-            <div className="space-y-2">
-              <div className="text-4xl md:text-5xl font-black bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
-                Secure
-              </div>
-              <p className="text-sm text-muted-foreground">API Authentication</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="px-4 py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-600/10" />
-        <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6">
-          <h2 className="text-3xl md:text-4xl font-bold">
-            Ready to Transform Your Workflow?
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            Join developers and teams using Taskly.AI to stay organized and productive
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <Link 
-              href="/docs/how-to-use" 
-              className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg font-semibold text-base shadow-lg hover:shadow-xl hover:shadow-cyan-500/50 transition-all duration-300 hover:scale-105"
-            >
-              Read Documentation
-            </Link>
-            <Link 
-              href="/docs/api" 
-              className="px-6 py-3 border-2 border-border bg-background/50 backdrop-blur-sm rounded-lg font-semibold text-base hover:bg-accent transition-all duration-300 hover:scale-105"
-            >
-              View API Reference
-            </Link>
           </div>
         </div>
       </section>
